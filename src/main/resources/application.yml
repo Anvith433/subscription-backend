@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: subscriptions-backend
+
+  jpa:
+    hibernate:
+      ddl-auto: update

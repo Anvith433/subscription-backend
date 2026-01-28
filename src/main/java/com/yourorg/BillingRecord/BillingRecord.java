@@ -23,8 +23,6 @@ public class BillingRecord {
     @Column(name="id", nullable=false)
     private long id;
 
-    @Column(name="subscription_id", nullable=false)
-    private long subscriptionId;
 
     @Column(name="amount",precision=10, scale=2)
     private  Double amount;

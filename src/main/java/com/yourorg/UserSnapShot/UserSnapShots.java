@@ -17,7 +17,7 @@ import com.yourorg.Subscriptions.Subscription;
 
 public class UserSnapShots {
 
-  public class UsageSnapshot {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,4 +43,4 @@ public class UserSnapShots {
     private Instant createdAt = Instant.now();
 }
     
-}
+

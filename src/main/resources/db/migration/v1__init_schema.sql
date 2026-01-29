@@ -7,9 +7,26 @@ CREATE TABLE users (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     last_login_at TIMESTAMP WITH TIME ZONE
 );
-
 CREATE INDEX idx_users_email ON users(email);
 
+CREATE TABLE subscriptions (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    provider_name VARCHAR(255) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    start_date DATE NOT NULL,
+    renewal_cycle VARCHAR(20) NOT NULL,
+    renewal_date DATE NOT NULL,
+    price NUMERIC(10,2) NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    CONSTRAINT fk_subscription_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
 
 
 CREATE TABLE recommendations (
@@ -44,10 +61,6 @@ CREATE TABLE billing_records (
     CONSTRAINT fk_billing_subscription
         FOREIGN KEY (subscription_id) REFERENCES subscriptions(id)
 );
-
-
-
-
 CREATE TABLE user_snapshots (
     id BIGSERIAL PRIMARY KEY,
     subscription_id BIGINT NOT NULL,

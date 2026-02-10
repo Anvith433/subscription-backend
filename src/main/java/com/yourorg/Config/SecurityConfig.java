@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.yourorg.Users.CustomUserDetailsService;
+import com.yourorg.Config.jwtAuthenticationFilter;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 
 @Configuration 
 @EnableWebSecurity
@@ -19,6 +22,12 @@ public class SecurityConfig {
 
     @Autowired 
     private UserDetailsService userDetailsService;
+
+    @Autowired 
+    private JwtAuthenticationFilter jwtAuthFilter;
+
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain filter (HttpSecurity http) throws Exception{
@@ -30,7 +39,9 @@ public class SecurityConfig {
     .anyRequest().authenticated())
     .httpBasic(Customizer.withDefaults())
     .sessionManagement(session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    );
+    )
+    .authenticationProvider(authenticationProvider)
+    .addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
     return http.build();
     
     }

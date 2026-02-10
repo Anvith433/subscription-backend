@@ -1,0 +1,70 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk-17'
+    }
+
+    environment {
+        MAVEN_OPTS = "-Dmaven.repo.local=.m2/repository"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Java') {
+            steps {
+                sh 'java -version'
+            }
+        }
+
+        stage('Clean') {
+            steps {
+                sh './mvnw clean'
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                sh './mvnw compile'
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                sh './mvnw test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh './mvnw package -DskipTests'
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build completed successfully'
+        }
+
+        failure {
+            echo 'Build failed'
+        }
+
+        always {
+            cleanWs()
+        }
+    }
+}

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.yourorg.Users.CustomUserDetailsService;
+
 @Configuration 
 @EnableWebSecurity
 public class SecurityConfig {
@@ -20,13 +22,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filter (HttpSecurity http) throws Exception{
-     return http
+     http
     .csrf(customizer -> customizer.disable())
-    
-    .authorizeHttpRequests(Request->Request.anyRequest().authenticated())
+    .authorizeHttpRequests(auth ->auth
+    .requestMatchers("/admin").hasRole("ADMIN")
+    .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
+    .anyRequest().authenticated())
     .httpBasic(Customizer.withDefaults())
-    .sessionManagement(session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-    .build();
+    .sessionManagement(session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    );
+    return http.build();
+    
     }
 
     @Bean 

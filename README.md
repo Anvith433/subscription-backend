@@ -1,1 +1,1 @@
-Jenkins CI test – build triggeredd
+Checking working of Jenkins

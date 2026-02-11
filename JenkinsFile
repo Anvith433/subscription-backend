@@ -13,43 +13,43 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                checkout scm
+                git 'https://github.com/Anvith433/subscription-backend.git'
             }
         }
 
         stage('Verify Java') {
             steps {
-                sh 'java -version'
+                bat 'java -version'
             }
         }
 
         stage('Clean') {
             steps {
-                sh './mvnw clean'
+                bat 'mvnw.cmd clean'
             }
         }
 
         stage('Compile') {
             steps {
-                sh './mvnw compile'
+                bat 'mvnw.cmd compile'
             }
         }
 
         stage('Unit Tests') {
             steps {
-                sh './mvnw test'
+                bat 'mvnw.cmd test'
             }
         }
 
         stage('Package') {
             steps {
-                sh './mvnw package -DskipTests'
+                bat 'mvnw.cmd package -DskipTests'
             }
         }
 
         stage('Archive Artifact') {
             steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                archiveArtifacts artifacts: 'target\\*.jar', fingerprint: true
             }
         }
     }

@@ -11,11 +11,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/Anvith433/subscription-backend.git'
-            }
-        }
 
         stage('Verify Java') {
             steps {
